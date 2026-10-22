@@ -220,6 +220,14 @@ function Level.build_scenery()
 		Level.clouds[i] = c
 	end
 
+	-- cloud drifting in the chasm, so it reads as a drop and not a path
+	local k = 0
+	local cy = 0.0
+	for k = 1, 6 do
+		cy = -2.6 + k * 1.1
+		make("fx18", 36, cy, 2.1, 2.2)
+	end
+
 	-- a camp dog
 	local dog = {}
 	dog.e = make("dog0", 3, -1, CAMP_TOP + 0.3, 0.7)
