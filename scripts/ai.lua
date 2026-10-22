@@ -53,6 +53,7 @@ end
 -- once within `near`.
 function AI.steer(u, tx, ty, near, scale, reckless)
 	u.careful = not reckless
+	u.edge = STEP
 	local dx = tx - u.x
 	local dy = ty - u.y
 	local d = sqrt(dx * dx + dy * dy)

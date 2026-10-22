@@ -173,6 +173,10 @@ function HUD.context(W, H)
 	if msg ~= "" then
 		HUD.panel(4, H - 30, #msg * 8 + 8, 12)
 		gui:text(msg, 8, H - 28, C_GOLD)
+	elseif Game.goal ~= nil then
+		local g = "> " .. Game.goal
+		HUD.panel(4, H - 30, #g * 8 + 8, 12)
+		gui:text(g, 8, H - 28, C_TEXT)
 	end
 	if msg2 ~= "" then
 		gui:text(msg2, 6, H - 12, C_DIM)

@@ -130,6 +130,8 @@ function Game.reset_stats()
 	Game.stats = st
 	Game.capture_t = 0.0
 	Game.warned_shells = false
+	Game.goal = nil
+	Game.obj_t = 0.0
 	G.play_time = 0.0
 end
 
@@ -181,9 +183,49 @@ function Game.on_death(u, why)
 	end
 end
 
+-- What to do next, worked out once a second for the HUD.
+function Game.objective()
+	local outpost = 0
+	local crest = 0
+	local civ = 0
+	local i = 0
+	local u = nil
+	for i = 1, Units.n do
+		u = Units.list[i]
+		if not u.dead then
+			if u.team == 2 and u.x > 25 and u.x < 35 then
+				outpost = outpost + 1
+			elseif u.team == 2 and u.x > 49 and u.x < 59 then
+				crest = crest + 1
+			elseif u.team == 0 and u.x > 37 and u.x < 53 then
+				civ = civ + 1
+			end
+		end
+	end
+	if outpost > 0 then
+		return "TAKE THEIR OUTPOST IN THE VALLEY"
+	end
+	if crest > 0 and civ > 0 then
+		return "ENLIST HIGHDALE, THEN CLEAR THE CREST"
+	end
+	if crest > 0 then
+		return "CLEAR THE RAIDERS ON THE CREST"
+	end
+	local s = Ships.player_ship()
+	if s ~= nil and s.x < 70 and s.pilot == nil then
+		return "BOARD THE MAGPIE: E AT HER HELM"
+	end
+	return "FLY EAST: TAKE THE FORTRESS FLAG"
+end
+
 function Game.update(dt)
 	if G.state ~= "play" then
 		return
+	end
+	Game.obj_t = (Game.obj_t or 0) - dt
+	if Game.obj_t <= 0 then
+		Game.obj_t = 1.0
+		Game.goal = Game.objective()
 	end
 	if Cmd.nours == 0 then
 		G.state = "lost"

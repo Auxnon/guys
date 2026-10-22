@@ -311,8 +311,10 @@ function Level.squad(c, n, guns, level)
 		if i <= guns then
 			w = "pistol"
 		end
-		local oy = rnd(-1.5, 1.5)
-		u = Level.soldier(c.team, c.x + 1 + i * 0.4, c.y + oy, w, "follow", level)
+		-- to the west of their commander, in three files
+		local oy = (i % 3 - 1) * 0.9
+		local ox = 1 + flr((i - 1) / 3) * 0.8
+		u = Level.soldier(c.team, c.x - ox, c.y + oy, w, "follow", level)
 		Cmd.join(c, u)
 	end
 end

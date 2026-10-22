@@ -157,7 +157,9 @@ function Unit.add_kill(u)
 end
 
 -- One horizontal step; returns true if a wall stopped it. A `careful`
--- step also refuses to go over an edge (that isn't a bump, though).
+-- step also refuses to drop further than `u.edge` (STEP for soldiers, so
+-- they never step off a ledge unordered; a bigger one for the commander you
+-- control, so only a jump takes you into the clouds). That isn't a bump.
 function Unit.try(u, dx, dy, careful)
 	local nx = u.x + dx
 	local ny = u.y + dy
@@ -165,8 +167,11 @@ function Unit.try(u, dx, dy, careful)
 	if wall then
 		return true
 	end
-	if careful and u.grounded and (g == nil or g < u.z - STEP) then
-		return false
+	if careful and u.grounded then
+		local drop = u.edge or STEP
+		if g == nil or g < u.z - drop then
+			return false
+		end
 	end
 	u.x = nx
 	u.y = ny

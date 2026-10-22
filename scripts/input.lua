@@ -135,6 +135,8 @@ function Input.choose()
 end
 
 function Input.walk(c)
+	c.careful = true
+	c.edge = 3.2
 	local ix = 0.0
 	local iy = 0.0
 	if key("w") or key("up") or btn("dup") then
